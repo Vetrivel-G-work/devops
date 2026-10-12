@@ -22,10 +22,7 @@ pipeline {
         stage('Prepare Build Context') {
             steps {
                 sh '''
-                    test -f Dockerfile
                     cp Dockerfile application/Dockerfile
-                    test -f application/app.py
-                    test -f application/requirements.txt
                     echo "Build context prepared"
                 '''
             }
@@ -36,8 +33,7 @@ pipeline {
                 dir('application') {
                     sh '''
                         docker build \
-                            -t ${IMAGE_NAME}:${BUILD_NUMBER} \
-                            -t ${IMAGE_NAME}:latest .
+                            -t flask-devsecops-demo:${BUILD_NUMBER} .
                     '''
                 }
             }
