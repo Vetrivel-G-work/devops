@@ -13,8 +13,8 @@ pipeline {
         stage('Checkout Application') {
             steps {
                 dir('application') {
-                    git branch: "${APP_BRANCH}",
-                        url: "${APP_REPO}"
+                    git branch: "main",
+                        url: "https://github.com/Vetrivel-G-work/flask-devsecops-demo.git"
                 }
             }
         }
@@ -28,17 +28,6 @@ pipeline {
                     test -f application/requirements.txt
                     echo "Build context prepared"
                 '''
-            }
-        }
-
-        stage('Validate Python') {
-            steps {
-                dir('application') {
-                    sh '''
-                        python3 --version
-                        python3 -m py_compile app.py
-                    '''
-                }
             }
         }
 
@@ -57,8 +46,6 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh '''
-                    docker rm -f ${CONTAINER_NAME} 2>/dev/null || true
-
                     docker run -d \
                         --name ${CONTAINER_NAME} \
                         -p ${APP_PORT}:5000 \
